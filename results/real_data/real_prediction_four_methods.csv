@@ -1,0 +1,5 @@
+"Method","MSPE","Predictive_Coverage","Latent_CI_Coverage","m","design_p","n_sample","n_train","n_test"
+"BSGL",4.138e-05,NA,NA,10,15,10000,8002,1998
+"GSVC",4.535e-05,NA,NA,10,15,10000,8002,1998
+"GGP-GAM",6.81e-05,NA,NA,10,15,10000,8002,1998
+"MGWR",0.00015,NA,NA,10,15,10000,8002,1998

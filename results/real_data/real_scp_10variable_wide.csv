@@ -1,0 +1,11 @@
+"variable","label","BSGL","Gaussian SVC"
+"red_reflectance","Red Reflectance",0.98,0.970625
+"NIR_reflectance","NIR Reflectance",0.99,0.980625
+"blue_reflectance","Blue Reflectance",0.015625,0.008125
+"MIR_reflectance","MIR Reflectance",0.300625,0.441875
+"GPP","GPP",0.959375,0.841875
+"LE","LE",0.804375,0.768125
+"view_zenith_angle","View Zenith Angle",0.1975,0.20875
+"sun_zenith_angle","Sun Zenith Angle",0.636875,0.5825
+"relative_azimuth_angle","Relative Azimuth Angle",0.31875,0.281875
+"LC_Type4","LC Type4",0.0242708333333333,0.0269791666666667

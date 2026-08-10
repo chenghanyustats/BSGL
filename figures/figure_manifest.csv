@@ -1,0 +1,15 @@
+paper_file,figure,status,file,source_script_or_process
+main,Figure 1a,retained,figures/main/fig1a_beta3.png,scripts/full_reproduction/plot_four_method_gray_n1000_p5.R using retained gray_run_fit.rds
+main,Figure 1b,retained,figures/main/fig1b_beta5.png,scripts/full_reproduction/plot_four_method_gray_n1000_p5.R using retained gray_run_fit.rds
+main,Figure 2,retained,figures/main/fig2_simulation_scp_map.png,scripts/full_reproduction/regenerate_main_fig2_sim_scp_map.R / retained generated SCP map
+main,Figure 3,retained,figures/main/fig3_evi_comparison.png,real_newfig.R / plot_maps.R real-data plotting workflow
+main,Figure 4,retained,figures/main/fig4_modis_scp_maps.png,scripts/full_reproduction/plot_real_10variable_scp_maps_mean_lc.R
+supplement,Figure S1,retained,figures/supplement/figS1_trace_plots.pdf,fit_chain.R trace plotting workflow
+supplement,Figure S2,retained,figures/supplement/figS2_parameter_dist.png,posterior distribution plotting workflow
+supplement,Figure S3,retained,figures/supplement/figS3_abrupt_beta2.png,scripts/full_reproduction/plot_abrupt_boundary_mainsettings_figures.R
+supplement,Figure S4,retained,figures/supplement/figS4_abrupt_beta5.png,scripts/full_reproduction/plot_abrupt_boundary_mainsettings_figures.R
+supplement,Figure S5,retained,figures/supplement/figS5_prediction_errors.png,retained prediction-error diagnostics from results/real_data/real_prediction_coverage_diagnostics.csv
+supplement,Figure S6,retained,figures/supplement/figS6_beta12_surface.png,scripts/full_reproduction/plot_interaction_x1_contribution.R
+supplement,Figure S7,retained,figures/supplement/figS7_beta12_scp.png,scripts/full_reproduction/plot_interaction_x1_contribution.R
+supplement,Figure S8,retained,figures/supplement/figS8_x1_contribution.png,scripts/full_reproduction/plot_interaction_x1_contribution.R
+supplement,Figure S9,retained,figures/supplement/figS9_real_interaction_scp.png,scripts/full_reproduction/plot_real_interaction_scp_maps_1x2.R

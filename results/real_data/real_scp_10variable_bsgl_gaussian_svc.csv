@@ -1,0 +1,21 @@
+"Method","variable","label","SCP"
+"BSGL","red_reflectance","Red Reflectance",0.98
+"BSGL","NIR_reflectance","NIR Reflectance",0.99
+"BSGL","blue_reflectance","Blue Reflectance",0.015625
+"BSGL","MIR_reflectance","MIR Reflectance",0.300625
+"BSGL","GPP","GPP",0.959375
+"BSGL","LE","LE",0.804375
+"BSGL","view_zenith_angle","View Zenith Angle",0.1975
+"BSGL","sun_zenith_angle","Sun Zenith Angle",0.636875
+"BSGL","relative_azimuth_angle","Relative Azimuth Angle",0.31875
+"BSGL","LC_Type4","LC Type4",0.0242708333333333
+"Gaussian SVC","red_reflectance","Red Reflectance",0.970625
+"Gaussian SVC","NIR_reflectance","NIR Reflectance",0.980625
+"Gaussian SVC","blue_reflectance","Blue Reflectance",0.008125
+"Gaussian SVC","MIR_reflectance","MIR Reflectance",0.441875
+"Gaussian SVC","GPP","GPP",0.841875
+"Gaussian SVC","LE","LE",0.768125
+"Gaussian SVC","view_zenith_angle","View Zenith Angle",0.20875
+"Gaussian SVC","sun_zenith_angle","Sun Zenith Angle",0.5825
+"Gaussian SVC","relative_azimuth_angle","Relative Azimuth Angle",0.281875
+"Gaussian SVC","LC_Type4","LC Type4",0.0269791666666667

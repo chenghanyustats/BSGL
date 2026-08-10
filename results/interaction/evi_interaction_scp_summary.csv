@@ -1,0 +1,18 @@
+"variable","label","term_type","SCP","mean_norm"
+"NIR_reflectance","NIR Reflectance","Main",0.988571428571429,2.23340806519443
+"red_reflectance","Red Reflectance","Main",0.976326530612245,1.55348497039194
+"GPP","GPP","Main",0.828571428571429,0.439276756099059
+"LE","LE","Main",0.675102040816327,0.487765224467237
+"NIR_reflectance_x_view_zenith_angle","NIR x View Zenith","Interaction",0.60734693877551,0.370348921966992
+"MIR_reflectance","MIR Reflectance","Main",0.424489795918367,0.328545034662984
+"sun_zenith_angle","Sun Zenith Angle","Main",0.328979591836735,0.283452570680502
+"NIR_reflectance_x_GPP","NIR x GPP","Interaction",0.285714285714286,0.378472807099934
+"LC_Type4_5","LC Type4 = 5","Main",0.0481632653061225,0.250720580936741
+"relative_azimuth_angle","Relative Azimuth Angle","Main",0.046530612244898,0.14518442372531
+"view_zenith_angle","View Zenith Angle","Main",0.0448979591836735,0.182917200964733
+"LC_Type4_7","LC Type4 = 7","Main",0.0114285714285714,0.194412384387271
+"blue_reflectance","Blue Reflectance","Main",0.00979591836734694,0.346394443879659
+"LC_Type4_2","LC Type4 = 2","Main",0,0.302390729321316
+"LC_Type4_4","LC Type4 = 4","Main",0,0.241679407104715
+"LC_Type4_6","LC Type4 = 6","Main",0,0.113549192434299
+"LC_Type4_8","LC Type4 = 8","Main",0,0.349009686758312

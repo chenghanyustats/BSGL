@@ -1,0 +1,7 @@
+"Method","group","SCP"
+"BSGL","LC_Type4_max",0.065
+"BSGL","LC_Type4_mean",0.0189583333333333
+"BSGL","Non_LC_top_mean",0.91140625
+"Gaussian SVC","LC_Type4_max",0.068125
+"Gaussian SVC","LC_Type4_mean",0.0213541666666667
+"Gaussian SVC","Non_LC_top_mean",0.899375

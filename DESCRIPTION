@@ -1,0 +1,42 @@
+Package: BSGL
+Type: Package
+Title: Bayesian Spatial Group Lasso for Spatially Varying Coefficient Models
+Version: 0.1.0
+Authors@R: c(
+    person("Qishi", "Zhan", role = c("aut", "cre"), email = "qishi.zhan@example.com")
+    )
+Description: Reviewer-facing R implementation for Bayesian spatial group lasso
+    spatially varying coefficient models, together with comparison methods,
+    prepared analysis data, retained result tables, and figure reproduction scripts
+    for the accompanying JABES paper.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 4.1.0)
+Imports:
+    cols4all,
+    cowplot,
+    GIGrvg,
+    ggplot2,
+    grid,
+    gridExtra,
+    GWmodel,
+    MCMCpack,
+    mgcv,
+    mvtnorm,
+    rnaturalearth,
+    rnaturalearthdata,
+    sf,
+    sp,
+    spdep,
+    splines,
+    viridis
+Suggests:
+    dplyr,
+    fields,
+    ggspatial,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2

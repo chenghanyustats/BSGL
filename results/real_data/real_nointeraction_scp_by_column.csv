@@ -1,0 +1,31 @@
+"Method","variable","label","SCP"
+"BSGL","red_reflectance","Red Reflectance",0.97625
+"BSGL","NIR_reflectance","NIR Reflectance",0.988125
+"BSGL","blue_reflectance","Blue Reflectance",0.01375
+"BSGL","MIR_reflectance","MIR Reflectance",0.40625
+"BSGL","GPP","GPP",0.906875
+"BSGL","LE","LE",0.774375
+"BSGL","view_zenith_angle","View Zenith Angle",0.20625
+"BSGL","sun_zenith_angle","Sun Zenith Angle",0.64625
+"BSGL","relative_azimuth_angle","Relative Azimuth Angle",0.3575
+"BSGL","LC_Type4_2","LC Type4 = 2",0
+"BSGL","LC_Type4_4","LC Type4 = 4",0.02
+"BSGL","LC_Type4_5","LC Type4 = 5",0.065
+"BSGL","LC_Type4_6","LC Type4 = 6",0.0275
+"BSGL","LC_Type4_7","LC Type4 = 7",0.00125
+"BSGL","LC_Type4_8","LC Type4 = 8",0
+"Gaussian SVC","red_reflectance","Red Reflectance",0.975
+"Gaussian SVC","NIR_reflectance","NIR Reflectance",0.985
+"Gaussian SVC","blue_reflectance","Blue Reflectance",0.06
+"Gaussian SVC","MIR_reflectance","MIR Reflectance",0.454375
+"Gaussian SVC","GPP","GPP",0.9225
+"Gaussian SVC","LE","LE",0.715
+"Gaussian SVC","view_zenith_angle","View Zenith Angle",0.199375
+"Gaussian SVC","sun_zenith_angle","Sun Zenith Angle",0.655625
+"Gaussian SVC","relative_azimuth_angle","Relative Azimuth Angle",0.31375
+"Gaussian SVC","LC_Type4_2","LC Type4 = 2",0
+"Gaussian SVC","LC_Type4_4","LC Type4 = 4",0.016875
+"Gaussian SVC","LC_Type4_5","LC Type4 = 5",0.068125
+"Gaussian SVC","LC_Type4_6","LC Type4 = 6",0.019375
+"Gaussian SVC","LC_Type4_7","LC Type4 = 7",0.02375
+"Gaussian SVC","LC_Type4_8","LC Type4 = 8",0

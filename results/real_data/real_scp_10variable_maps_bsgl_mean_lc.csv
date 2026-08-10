@@ -1,0 +1,11 @@
+"variable","label","SCP"
+"red_reflectance","Red Reflectance",0.98
+"NIR_reflectance","NIR Reflectance",0.99
+"blue_reflectance","Blue Reflectance",0.015625
+"MIR_reflectance","MIR Reflectance",0.300625
+"GPP","GPP",0.959375
+"LE","LE",0.804375
+"view_zenith_angle","View Zenith Angle",0.1975
+"sun_zenith_angle","Sun Zenith Angle",0.636875
+"relative_azimuth_angle","Relative Azimuth Angle",0.31875
+"LC_Type4","LC Type4",0.0242708333333337

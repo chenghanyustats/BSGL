@@ -1,0 +1,14 @@
+^(\\./)?\\.Rproj\\.user$
+^(\\./)?\\.Rhistory$
+^(\\./)?\\.RData$
+^(\\./)?\\.DS_Store$
+^(\\./)?\\.git
+^(\\./)?\\.gitignore$
+^(\\./)?figures
+^(\\./)?results
+^(\\./)?scripts/full_reproduction
+^(\\./)?data/data_indep
+^(\\./)?data/data_rep10
+^(\\./)?data/geo_naturalearth_10m
+^(\\./)?data/data_cleaned_small_expanded[.]RData
+\\.tar\\.gz$
