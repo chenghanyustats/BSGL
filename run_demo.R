@@ -43,32 +43,56 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
     install.packages("remotes")
 }
 
-# By default, install BSGL only when it is not already installed.
+# By default, install BSGL only when it is not already available.
 # Set BSGL_DEMO_INSTALL=true to force a fresh GitHub installation.
 force_install <- tolower(
     Sys.getenv("BSGL_DEMO_INSTALL", unset = "false")
 ) %in% c("1", "true", "yes")
 
-if (force_install || !requireNamespace("BSGL", quietly = TRUE)) {
-    cat("   Installing BSGL directly from GitHub...\n")
-    cat("   Repository: chenghanyustats/BSGL\n") # chenghanyustats to Qishi7
-    
-    remotes::install_github(
-        "chenghanyustats/BSGL",
-        dependencies = NA,      # Depends, Imports, and LinkingTo only
-        upgrade = "never",
-        build_vignettes = FALSE,
-        force = force_install
+# Treat a missing or broken local installation as unavailable rather than
+# allowing namespace-load errors to abort the bootstrap before reinstalling.
+bsgl_available <- function() {
+    tryCatch(
+        requireNamespace("BSGL", quietly = TRUE),
+        error = function(e) {
+            cat(
+                "   Existing BSGL installation is not usable: ",
+                conditionMessage(e), "\n",
+                sep = ""
+            )
+            FALSE
+        }
     )
 }
 
-if (!requireNamespace("BSGL", quietly = TRUE)) {
-    stop("BSGL could not be installed or loaded.")
+if (force_install || !bsgl_available()) {
+    cat("   Installing BSGL directly from GitHub...\n")
+    cat("   Repository: chenghanyustats/BSGL\n")
+
+    # We are already in the branch where BSGL is unavailable or the user
+    # explicitly requested reinstallation, so force a real GitHub install.
+    remotes::install_github(
+        "chenghanyustats/BSGL",
+        dependencies = NA,
+        upgrade = "never",
+        build_vignettes = FALSE,
+        force = TRUE
+    )
+}
+
+if (!bsgl_available()) {
+    stop(
+        "BSGL could not be installed or loaded from GitHub. ",
+        "Check the installation messages above and .libPaths()."
+    )
 }
 
 suppressPackageStartupMessages(library(BSGL))
-cat("   Loaded package: BSGL",
-    as.character(utils::packageVersion("BSGL")), "\n")
+bsgl_version <- tryCatch(
+    as.character(utils::packageVersion("BSGL")),
+    error = function(e) "unknown"
+)
+cat("   Loaded package: BSGL", bsgl_version, "\n")
 
 metric_row <- function(method, observed, predicted) {
     if (!is.numeric(predicted)) {
