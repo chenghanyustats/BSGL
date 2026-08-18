@@ -39,7 +39,7 @@ library(sp)
 
 ## Simulated Data
 
-The prepared simulation data are saved in `data/simulation_demo/n1000_p5`. The
+The prepared simulation data are saved in `inst/extdata/simulation_demo/n1000_p5`. The
 training data contain \(n = 1000\) observations and \(m = 5\) covariates; the
 test data contain 200 held-out observations.
 
@@ -47,10 +47,18 @@ test data contain 200 held-out observations.
 ## ============================================================================
 ## load the data
 ## ============================================================================
-load("data/simulation_demo/n1000_p5/train_data.RData")
-load("data/simulation_demo/n1000_p5/test_data.RData")
-load("data/simulation_demo/n1000_p5/grid_data.RData")
-load("data/simulation_demo/n1000_p5/meta_info.RData")
+demo_dir <- system.file(
+  "extdata", "simulation_demo", "n1000_p5",
+  package = "BSGL"
+)
+if (!nzchar(demo_dir)) {
+  stop("Installed BSGL package does not contain the simulation demo data.")
+}
+
+load(file.path(demo_dir, "train_data.RData"))
+load(file.path(demo_dir, "test_data.RData"))
+load(file.path(demo_dir, "grid_data.RData"))
+load(file.path(demo_dir, "meta_info.RData"))
 
 dim(train_data$X)
 dim(test_data$X)
@@ -189,7 +197,7 @@ For the package-based local demo result table, run:
 ## ============================================================================
 ## package-based result script
 ## ============================================================================
-system("Rscript run_demo.R")
+source("run_demo.R")
 read.csv("results/demo_method_comparison.csv")
 ```
 

@@ -1,9 +1,5 @@
-library(mvtnorm)
 library(MCMCpack)
 library(splines)
-library(ggplot2)
-library(cowplot)
-library(viridis)
 
 # =========================================================
 # Gaussian-prior basis SVC
@@ -31,85 +27,85 @@ fit_gs <- function(y, X, coords, L = 36,
                    a_k = 2, b_k = 1,
                    a_s = 2, b_s = 1,
                    verbose = TRUE) {
-  
+
   n <- length(y)
   m <- ncol(X)
   nsave <- niter - nburn
-  
+
   if (verbose) {
     cat("Gaussian basis SVC\n")
     cat("n =", n, " p =", m, " L =", L, "\n")
   }
-  
+
   # basis
   Psi <- make_basis(coords, L)
   saved_knots <- attr(Psi, "saved_knots")
-  
+
   # precompute X_j * Psi and crossprod
   XP <- vector("list", m)
   XtX <- vector("list", m)
   Xty <- vector("list", m)
-  
+
   for (j in 1:m) {
     XP[[j]] <- X[, j] * Psi
     XtX[[j]] <- crossprod(XP[[j]])
     Xty[[j]] <- crossprod(XP[[j]], y)
   }
-  
+
   # init
   A <- matrix(0, L, m)
   s2 <- var(y)
   k2 <- 1
-  
+
   A_smp <- array(0, c(L, m, nsave))
   s2_smp <- numeric(nsave)
   k2_smp <- numeric(nsave)
-  
+
   # fitted and residual
   fit <- rep(0, n)
   res <- y - fit
-  
+
   t0 <- Sys.time()
-  
+
   for (it in 1:niter) {
-    
+
     # ---- update A[,j]
     for (j in 1:m) {
       a_old <- A[, j]
       Xa_old <- XP[[j]] %*% a_old
-      
+
       # add back old contribution
       rj <- res + Xa_old
-      
+
       # posterior
       Prec <- XtX[[j]] + diag(1 / k2, L)
       R <- chol(Prec)
       V0 <- chol2inv(R)
       mj <- V0 %*% crossprod(XP[[j]], rj)
       Vj <- s2 * V0
-      
+
       a_new <- as.numeric(rmvnorm(1, mj, Vj))
       A[, j] <- a_new
-      
+
       Xa_new <- XP[[j]] %*% a_new
-      
+
       # update residual efficiently
       res <- rj - Xa_new
     }
-    
+
     # ---- update k2
     A2 <- sum(A^2)
     shp_k <- a_k + m * L / 2
     scl_k <- b_k + A2 / (2 * s2)
     k2 <- rinvgamma(1, shape = shp_k, scale = scl_k)
-    
+
     # ---- update s2
     SSE <- sum(res^2)
     S <- 0.5 * SSE + 0.5 * A2 / k2
     shp_s <- a_s + (n + m * L) / 2
     scl_s <- b_s + S
     s2 <- rinvgamma(1, shape = shp_s, scale = scl_s)
-    
+
     # ---- store
     if (it > nburn) {
       idx <- it - nburn
@@ -117,7 +113,7 @@ fit_gs <- function(y, X, coords, L = 36,
       s2_smp[idx] <- s2
       k2_smp[idx] <- k2
     }
-    
+
     if (verbose && it %% 100 == 0) {
       elap <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
       rate <- it / max(elap, 1e-8)
@@ -130,7 +126,7 @@ fit_gs <- function(y, X, coords, L = 36,
           "| ETA:", round(eta, 1), "min\n")
     }
   }
-  
+
   out <- list(
     A = A_smp,
     s2 = s2_smp,
@@ -167,13 +163,13 @@ pred_gs <- function(fit, X_new, coords_new, return_samples = FALSE) {
     fit$L,
     saved_knots = fit$saved_knots
   )
-  
+
   X_new <- as.matrix(X_new)
   n_new <- nrow(X_new)
   ns <- dim(fit$A)[3]
-  
+
   mu_smp <- matrix(0, nrow = n_new, ncol = ns)
-  
+
   for (s in 1:ns) {
     mu <- rep(0, n_new)
     for (j in 1:fit$m) {
@@ -181,12 +177,12 @@ pred_gs <- function(fit, X_new, coords_new, return_samples = FALSE) {
     }
     mu_smp[, s] <- mu
   }
-  
+
   y_smp <- mu_smp
   for (s in 1:ns) {
     y_smp[, s] <- mu_smp[, s] + rnorm(n_new, mean = 0, sd = sqrt(fit$s2[s]))
   }
-  
+
   out <- list(
     mean = rowMeans(mu_smp),
     lower = apply(y_smp, 1, quantile, 0.025),
@@ -194,12 +190,12 @@ pred_gs <- function(fit, X_new, coords_new, return_samples = FALSE) {
     latent_lower = apply(mu_smp, 1, quantile, 0.025),
     latent_upper = apply(mu_smp, 1, quantile, 0.975)
   )
-  
+
   if (return_samples) {
     out$mu_samples <- mu_smp
     out$y_samples <- y_smp
   }
-  
+
   return(out)
 }
 
@@ -209,15 +205,15 @@ pred_gs <- function(fit, X_new, coords_new, return_samples = FALSE) {
 
 betas_gs <- function(fit, coords_or_grid) {
   Abar <- apply(fit$A, c(1, 2), mean)
-  
+
   if (is.list(coords_or_grid) && "grid_points" %in% names(coords_or_grid)) {
     coords <- as.matrix(coords_or_grid$grid_points)
   } else {
     coords <- as.matrix(coords_or_grid)
   }
-  
+
   Psi_new <- make_basis(coords, fit$L, saved_knots = fit$saved_knots)
-  
+
   B <- matrix(0, nrow(Psi_new), fit$m)
   for (j in 1:fit$m) {
     B[, j] <- Psi_new %*% Abar[, j]
@@ -289,7 +285,7 @@ gs_surface_ci <- function(fit, coords_or_grid, ci_level = 0.95) {
 calc_scp_gs <- function(fit, coords_or_grid, ci_level = 0.95) {
   ci <- gs_surface_ci(fit, coords_or_grid, ci_level = ci_level)
   scp <- colMeans(ci$excludes0)
-  names(scp) <- paste0("β", seq_len(fit$m))
+  names(scp) <- paste0("\u03B2", seq_len(fit$m))
   scp
 }
 
@@ -300,11 +296,11 @@ calc_scp_gs <- function(fit, coords_or_grid, ci_level = 0.95) {
 sum_gs <- function(fit) {
   Abar <- apply(fit$A, c(1, 2), mean)
   norms <- matrix(0, dim(fit$A)[3], fit$m)
-  
+
   for (j in 1:fit$m) {
     norms[, j] <- apply(fit$A[, j, ], 2, function(z) sqrt(sum(z^2)))
   }
-  
+
   list(
     Abar = Abar,
     mean_norm = colMeans(norms),
@@ -319,10 +315,10 @@ sum_gs <- function(fit) {
 
 eval_gs <- function(fit, test_data) {
   pr <- pred_gs(fit, test_data$X, test_data$coords)
-  
+
   cover <- mean(test_data$y >= pr$lower & test_data$y <= pr$upper)
   mspe  <- mean((test_data$y - pr$mean)^2)
-  
+
   list(
     mspe = mspe,
     cover = cover
@@ -335,24 +331,20 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
                       grayscale = FALSE, show_title = TRUE,
                       save_plot = TRUE, save_dir = "plots",
                       width = 13, height = 2.6, dpi = 300) {
-  library(ggplot2)
-  library(cowplot)
-  library(viridis)
-  library(grid)
-  
+
   # -----------------------------
   # create save dir
   # -----------------------------
   if (save_plot) {
     dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
   }
-  
+
   # -----------------------------
   # grid points
   # -----------------------------
   grid_points <- as.data.frame(grid_data$grid_points)
   colnames(grid_points) <- c("x", "y")
-  
+
   # -----------------------------
   # beta surfaces
   # -----------------------------
@@ -361,7 +353,7 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
   beta_gam  <- get_gam_betas(gam_model, as.matrix(grid_points))[, j]
   beta_mgwr <- get_mgwr_betas(mgwr_model, as.matrix(grid_points))[, j]
   beta_gs   <- betas_gs(gs_fit, grid_data)[, j]
-  
+
   plot_data <- list(
     "True"         = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_true),
     "BSGL"         = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_bsgl),
@@ -369,9 +361,9 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
     "GSVC"         = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_gs),
     "MGWR"         = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_mgwr)
   )
-  
+
   lims <- range(unlist(lapply(plot_data, function(df) df$beta)), na.rm = TRUE)
-  
+
   make_panel <- function(df, ttl, keep_legend = FALSE) {
     p <- ggplot(df, aes(x = x, y = y, fill = beta)) +
       geom_raster() +
@@ -386,15 +378,15 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
         legend.box.margin = margin(0, 0, 0, 0),
         legend.box.spacing = unit(0, "pt")
       )
-    
+
     if (show_title) p <- p + ggtitle(ttl)
-    
+
     if (grayscale) {
       p <- p + scale_fill_gradient(
         low = "white", high = "black",
         limits = lims, name = NULL,
         guide = guide_colorbar(
-          barheight = unit(4.2, "cm"),   # 比之前更高
+          barheight = unit(4.2, "cm"),   # Taller than before
           barwidth  = unit(0.22, "cm"),
           ticks = TRUE
         )
@@ -403,13 +395,13 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
       p <- p + scale_fill_viridis_c(
         limits = lims, name = NULL,
         guide = guide_colorbar(
-          barheight = unit(4.2, "cm"),   # 比之前更高
+          barheight = unit(4.2, "cm"),   # Taller than before
           barwidth  = unit(0.22, "cm"),
           ticks = TRUE
         )
       )
     }
-    
+
     if (!keep_legend) {
       p <- p + theme(legend.position = "none")
     } else {
@@ -418,19 +410,19 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
         legend.text = element_text(size = 10, face = "bold")
       )
     }
-    
+
     p
   }
-  
+
   p1 <- make_panel(plot_data[["True"]], "True", FALSE)
   p2 <- make_panel(plot_data[["BSGL"]], "BSGL", FALSE)
   p3 <- make_panel(plot_data[["GGP-GAM"]], "GGP-GAM", FALSE)
   p4 <- make_panel(plot_data[["GSVC"]], "GSVC", FALSE)
   p5_leg <- make_panel(plot_data[["MGWR"]], "MGWR", TRUE)
-  
+
   lgd <- cowplot::get_legend(p5_leg)
   p5  <- p5_leg + theme(legend.position = "none")
-  
+
   main_row <- cowplot::plot_grid(
     p1, p2, p3, p4, p5,
     nrow = 1,
@@ -438,13 +430,13 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
     align = "h",
     axis = "tb"
   )
-  
+
   final_plot <- cowplot::plot_grid(
     main_row, lgd,
     nrow = 1,
     rel_widths = c(1, 0.04)
   )
-  
+
   if (save_plot) {
     file_name <- paste0("beta", j, "_compare_n", n_val, "_p", p_val, ".png")
     ggsave(
@@ -456,12 +448,12 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
       bg = "white"
     )
   }
-  
+
   return(final_plot)
 }
 
 
-# 
+#
 # plot_comp <- function(bsgl_fit, gs_fit, ssgl_model,
 #                               grid_data, meta_info, j,
 #                               n_basis, global_settings,
@@ -469,23 +461,23 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
 #   library(ggplot2)
 #   library(cowplot)
 #   library(viridis)
-#   
+#
 #   grid_points <- grid_data$grid_points
-#   
+#
 #   beta_true <- calc_true_beta(grid_points, meta_info$p)[, j]
 #   beta_bsgl <- betas_bsgl(bsgl_fit, grid_data)[, j]
 #   beta_gs   <- betas_gs(gs_fit, grid_data)[, j]
 #   beta_ssgl <- betas_ssgl(ssgl_model, grid_data, n_basis, global_settings)[, j]
-#   
+#
 #   plot_data <- list(
 #     "True" = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_true),
 #     "BSGL" = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_bsgl),
 #     "Gaussian-SVC" = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_gs),
 #     "SSGL" = data.frame(x = grid_points$x, y = grid_points$y, beta = beta_ssgl)
 #   )
-#   
+#
 #   lims <- range(unlist(lapply(plot_data, function(df) df$beta)), na.rm = TRUE)
-#   
+#
 #   make_panel <- function(df, ttl, keep_legend = FALSE) {
 #     p <- ggplot(df, aes(x = x, y = y, fill = beta)) +
 #       geom_raster() +
@@ -498,9 +490,9 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
 #         plot.title = element_text(hjust = 0.5, face = "bold", size = 15),
 #         plot.margin = margin(2, 2, 2, 2)
 #       )
-#     
+#
 #     if (show_title) p <- p + ggtitle(ttl)
-#     
+#
 #     if (grayscale) {
 #       p <- p + scale_fill_gradient(
 #         low = "white", high = "black",
@@ -511,7 +503,7 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
 #         limits = lims, name = NULL
 #       )
 #     }
-#     
+#
 #     if (!keep_legend) {
 #       p <- p + theme(legend.position = "none")
 #     } else {
@@ -522,29 +514,29 @@ plot_comp <- function(bsgl_fit, gs_fit, gam_model, mgwr_model,
 #         legend.text = element_text(size = 10, face = "bold")
 #       )
 #     }
-#     
+#
 #     p
 #   }
-#   
+#
 #   p1 <- make_panel(plot_data[["True"]], "True", FALSE)
 #   p2 <- make_panel(plot_data[["BSGL"]], "BSGL", FALSE)
 #   p3 <- make_panel(plot_data[["Gaussian-SVC"]], "Gaussian-SVC", FALSE)
 #   p4_leg <- make_panel(plot_data[["SSGL"]], "SSGL", TRUE)
-#   
+#
 #   lgd <- cowplot::get_legend(p4_leg)
 #   p4 <- p4_leg + theme(legend.position = "none")
-#   
+#
 #   main_row <- cowplot::plot_grid(
 #     p1, p2, p3, p4,
 #     nrow = 1,
 #     rel_widths = c(1, 1, 1, 1)
 #   )
-#   
+#
 #   final_plot <- cowplot::plot_grid(
 #     main_row, lgd,
 #     nrow = 1,
 #     rel_widths = c(1, 0.06)
 #   )
-#   
+#
 #   final_plot
 # }

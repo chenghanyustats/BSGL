@@ -1,10 +1,10 @@
 calc_true_beta <- function(coords, p) {
   n <- nrow(coords)
   true_beta <- matrix(0, n, p)
-  
-  # coords 是 [0,1]，转换到 [0,20] 来计算 beta
+
+  # coords are in [0,1]; rescale to [0,20] to calculate beta
   coords_20 <- coords * 20
-  
+
   for (i in 1:n) {
     x <- coords_20[i, 1]
     y <- coords_20[i, 2]

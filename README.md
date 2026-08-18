@@ -164,7 +164,7 @@ Each script first checks whether its prepared demo data are available within the
 The simulation demo uses the prepared training and test data corresponding to:
 
 ```text
-data/simulation_demo/n1000_p5/
+inst/extinst/extdata/simulation_demo/n1000_p5/
 ```
 
 The real-data demo uses the prepared MODIS EVI data file:
@@ -300,7 +300,8 @@ mgwr_pred <- pred_mgwr(mgwr_fit, X_new, coords_new)
 
 ```text
 R/                    Core BSGL, GSVC, GGP-GAM, and MGWR functions
-data/                 Prepared simulation and analysis data
+data/                 Retained analysis data excluded from package build
+inst/extdata/         Prepared simulation demo data installed with BSGL
 results/              Retained result tables
 figures/              Code-generated paper figures
 scripts/              Summary and reproduction scripts

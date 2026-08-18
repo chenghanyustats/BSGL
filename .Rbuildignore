@@ -14,3 +14,11 @@
 \\.tar\\.gz$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^run_demo\.R$
+^run_real_demo\.R$
+^scripts$
+^apply_.*\.R$
+^BSGL_.*_patch\.zip$
+^DESCRIPTION\.bak_.*$
+^R/.*\.bak_.*$
+^man/.*\.bak_.*$

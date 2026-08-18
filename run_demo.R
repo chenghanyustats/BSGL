@@ -175,7 +175,7 @@ if (nzchar(pkg_demo_dir)) {
     
     base_url <- paste0(
         "https://raw.githubusercontent.com/Qishi7/BSGL/",
-        "main/data/simulation_demo/n1000_p5/"
+        "main/inst/extdata/simulation_demo/n1000_p5/"
     )
     
     if (!file.exists(train_file)) {

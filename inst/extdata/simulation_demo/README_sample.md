@@ -1,6 +1,6 @@
 # Prepared Simulation Data
 
-This directory contains the prepared simulation subset used by the package-based
+This directory contains the prepared simulation subset used by the reviewer-facing
 reviewer result script.
 
 ## Data Specifications
@@ -20,6 +20,6 @@ reviewer result script.
 
 The main result script loads these files through:
 
-```sh
-Rscript run_demo.R
+```r
+source("run_demo.R")
 ```

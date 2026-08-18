@@ -4,8 +4,8 @@ tensor.prod.model.matrix <- function(Bx, By) {
   ny <- nrow(By)
   px <- ncol(Bx)
   py <- ncol(By)
-  
-  # 创建tensor product
+
+  # Create tensor product
   B <- matrix(0, nx, px * py)
   for (i in 1:px) {
     for (j in 1:py) {
