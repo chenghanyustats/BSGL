@@ -12,3 +12,5 @@
 ^(\\./)?data/geo_naturalearth_10m
 ^(\\./)?data/data_cleaned_small_expanded[.]RData
 \\.tar\\.gz$
+^.*\.Rproj$
+^\.Rproj\.user$
