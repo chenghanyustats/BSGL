@@ -197,7 +197,9 @@ For the package-based local demo result table, run:
 ## ============================================================================
 ## package-based result script
 ## ============================================================================
-source("run_demo.R")
+source(
+  "https://raw.githubusercontent.com/chenghanyustats/BSGL/main/run_demo.R"
+)
 read.csv("results/demo_method_comparison.csv")
 ```
 

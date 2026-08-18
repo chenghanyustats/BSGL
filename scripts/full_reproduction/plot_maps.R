@@ -275,7 +275,7 @@ plot_coefficient_maps <- function(lasso_gam, train_coords, sample_real_data,
   grid_data_dense <- list(grid_points = as.matrix(grid_coords_dense))
   
   # 计算beta
-  grid_betas_dense <- calc_beta(lasso_gam, grid_data_dense)
+  grid_betas_dense <- betas_bsgl(lasso_gam, grid_data_dense)
   
   # 转换坐标
   x_range_original <- range(sample_real_data$x)

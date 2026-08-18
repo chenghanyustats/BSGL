@@ -84,7 +84,7 @@ fit_gs <- function(y, X, coords, L = 36,
       mj <- V0 %*% crossprod(XP[[j]], rj)
       Vj <- s2 * V0
 
-      a_new <- as.numeric(rmvnorm(1, mj, Vj))
+      a_new <- as.numeric(mvtnorm::rmvnorm(1, mj, Vj))
       A[, j] <- a_new
 
       Xa_new <- XP[[j]] %*% a_new

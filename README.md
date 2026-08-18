@@ -20,7 +20,7 @@ Alternatively, the current GitHub version can be sourced directly from R:
 
 ```r
 source(
-  "https://raw.githubusercontent.com/Qishi7/BSGL/main/run_demo.R"
+  "https://raw.githubusercontent.com/chenghanyustats/BSGL/main/run_demo.R"
 )
 ```
 
@@ -66,7 +66,7 @@ Alternatively:
 
 ```r
 source(
-  "https://raw.githubusercontent.com/Qishi7/BSGL/main/run_real_demo.R"
+  "https://raw.githubusercontent.com/chenghanyustats/BSGL/main/run_real_demo.R"
 )
 ```
 
@@ -124,7 +124,7 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
 
-remotes::install_github("Qishi7/BSGL")
+remotes::install_github("chenghanyustats/BSGL")
 library(BSGL)
 ```
 
@@ -164,7 +164,7 @@ Each script first checks whether its prepared demo data are available within the
 The simulation demo uses the prepared training and test data corresponding to:
 
 ```text
-inst/extinst/extdata/simulation_demo/n1000_p5/
+inst/extdata/simulation_demo/n1000_p5/
 ```
 
 The real-data demo uses the prepared MODIS EVI data file:
@@ -230,6 +230,18 @@ If the full repository has been downloaded, compact checks of the retained table
 source("scripts/02_summarize_main_results.R")
 source("scripts/04_figure_inventory.R")
 ```
+
+### Full reproduction scripts
+
+The longer scripts under `scripts/full_reproduction/` are source-repository workflows, not installed-package workflows. Run them from the repository root. They use the retained full-reproduction inputs under `data/data_rep10/`, `data/data_indep/`, `data/geo_naturalearth_10m/`, and `data/data_cleaned_small_expanded.RData`. These larger inputs are intentionally excluded from the built R package by `.Rbuildignore`.
+
+Before launching a long reproduction run, execute:
+
+```r
+source("scripts/01_repository_preflight.R")
+```
+
+The dependency order for the longer workflows is documented in `scripts/full_reproduction/README.md`.
 
 ## Method Overview
 

@@ -9,8 +9,8 @@ library(ggplot2)
 library(cowplot)
 library(grid)
 
-fit_file <- "figures/simulation/gray_four_method_n1000_p5_rerun/gray_run_fit.rds"
-out_dir <- "figures/simulation/gray_four_method_n1000_p5_rerun"
+fit_file <- "figures/reproduction_outputs/simulation/gray_four_method_n1000_p5_rerun/gray_run_fit.rds"
+out_dir <- "figures/reproduction_outputs/simulation/gray_four_method_n1000_p5_rerun"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 obj <- readRDS(fit_file)

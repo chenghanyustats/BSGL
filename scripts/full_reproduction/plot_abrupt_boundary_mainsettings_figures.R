@@ -5,7 +5,7 @@ library(ggplot2)
 library(viridis)
 
 fit_path <- "results/abrupt_boundary/main_simulation_settings_rerun/abrupt_boundary_mainsettings_fit.rds"
-out_dir <- "figures/abrupt_boundary/rerun"
+out_dir <- "figures/reproduction_outputs/abrupt_boundary"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 obj <- readRDS(fit_path)

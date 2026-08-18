@@ -8,13 +8,16 @@ vignette: >
 ---
 
 This vignette demonstrates the real-data workflow for the cleaned MODIS EVI
-subset included with the `BSGL` package. The example follows the paper
+reviewer subset distributed in the BSGL GitHub repository. The example follows the paper
 preprocessing: continuous predictors are scaled using the training set, the
 land-cover variable is represented by main-effect dummy variables, and EVI is
 modeled on the log scale.
 
-The full raw MODIS data are not included. The file
-`data/data_cleaned_small_expanded.RData` is the prepared reviewer subset.
+The full raw MODIS data are not included. The prepared reviewer subset is
+stored in the GitHub source repository as `data/data_cleaned_small_expanded.RData`.
+It is intentionally excluded from the built package because of its size; the code
+below follows `run_real_demo.R` by using installed `extdata` when available and
+otherwise downloading only this prepared file.
 The demo refits models locally rather than reading manuscript tables directly.
 The retained CSV files under `results/` provide the manuscript-reference values
 reported in the paper.
@@ -41,7 +44,32 @@ coordinates.
 ## ============================================================================
 ## load the data
 ## ============================================================================
-load("data/data_cleaned_small_expanded.RData")
+data_file <- system.file(
+    "extdata", "real_demo", "data_cleaned_small_expanded.RData",
+    package = "BSGL"
+)
+
+if (!nzchar(data_file) || !file.exists(data_file)) {
+    demo_dir <- file.path(tempdir(), "BSGL_real_demo")
+    dir.create(demo_dir, recursive = TRUE, showWarnings = FALSE)
+    data_file <- file.path(demo_dir, "data_cleaned_small_expanded.RData")
+    if (!file.exists(data_file)) {
+        utils::download.file(
+            paste0(
+                "https://raw.githubusercontent.com/chenghanyustats/BSGL/",
+                "main/data/data_cleaned_small_expanded.RData"
+            ),
+            data_file,
+            mode = "wb"
+        )
+    }
+}
+
+if (!file.exists(data_file)) {
+    stop("Prepared MODIS reviewer data could not be located or downloaded.")
+}
+
+load(data_file)
 real_data <- data_cleaned_small
 
 dim(real_data)
@@ -100,7 +128,7 @@ make_lc_dummy_design <- function(train_lc, test_lc) {
 ## ============================================================================
 ## construct training and test sets
 ## ============================================================================
-sample_size <- 2000
+sample_size <- 1000
 set.seed(20260531)
 idx <- if (nrow(real_data) > sample_size) {
     sample(nrow(real_data), sample_size)
@@ -113,6 +141,16 @@ set.seed(456)
 test_indices <- sample(seq_len(nrow(sample_data)),
                        size = floor(0.2 * nrow(sample_data)))
 train_indices <- setdiff(seq_len(nrow(sample_data)), test_indices)
+
+# Keep the spatial boundary in the training set, matching run_real_demo.R.
+boundary_indices <- unique(c(
+    which(sample_data$scaled_x == min(sample_data$scaled_x)),
+    which(sample_data$scaled_x == max(sample_data$scaled_x)),
+    which(sample_data$scaled_y == min(sample_data$scaled_y)),
+    which(sample_data$scaled_y == max(sample_data$scaled_y))
+))
+test_indices <- setdiff(test_indices, boundary_indices)
+train_indices <- sort(unique(c(train_indices, boundary_indices)))
 
 continuous_vars <- c(
     "red_reflectance", "NIR_reflectance", "blue_reflectance",
@@ -253,3 +291,14 @@ scp
 The prediction and SCP objects above are local demo results. Small numerical
 differences across local runs may occur due to runtime settings, stochastic
 fitting components, or seed/split differences.
+
+## Standalone Reviewer Workflow
+
+For the complete reviewer-facing workflow, including independent method-status
+reporting and the common prediction table, run:
+
+```{r, eval=FALSE}
+source(
+  "https://raw.githubusercontent.com/chenghanyustats/BSGL/main/run_real_demo.R"
+)
+```

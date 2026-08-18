@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
   library(cowplot)
 })
 
-out_dir <- "pic"
+out_dir <- "figures/reproduction_outputs/real_data"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 continuous_vars <- c(

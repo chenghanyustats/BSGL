@@ -1,5 +1,6 @@
 source(file.path("R", "beta_functions.R"))
 source(file.path("R", "load_data.R"))
+source(file.path("R", "helpers_gplasso.R"))
 source(file.path("R", "helpers_gpprior.R"))
 source(file.path("R", "fit_chain.R"))
 source(file.path("R", "calc_beta.R"))
@@ -15,8 +16,8 @@ library(GIGrvg)
 # =========================================================
 # settings
 # =========================================================
-n_list <- c(1000, 2000, 5000, 10000)
-p_list <- c(5, 7, 10)
+n_list <- c(1000, 5000, 10000)
+p_list <- c(5, 10, 20)
 
 L_fixed <- 25   # 如果你之前 Gaussian SVC 用 36，就改成 36
 
@@ -90,10 +91,11 @@ for (n_now in n_list) {
     
     results_gs_all <- rbind(results_gs_all, one_res)
     
-    dir.create("results_gs", showWarnings = FALSE)
+    gs_out_dir <- file.path("results", "simulation", "gs_independent_runs")
+    dir.create(gs_out_dir, showWarnings = FALSE, recursive = TRUE)
     write.csv(
       results_gs_all,
-      file = "results_gs/gaussian_svc_all_results.csv",
+      file = file.path(gs_out_dir, "gaussian_svc_all_results.csv"),
       row.names = FALSE
     )
   }

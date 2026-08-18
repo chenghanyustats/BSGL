@@ -107,7 +107,7 @@ summary_df <- data.frame(
   MSE_0 = c(mse_0_gam, mse_0_mgwr, mse_0_bsgl, mse_0_gs)
 )
 
-out_dir <- "figures/simulation/gray_four_method_n1000_p5_rerun"
+out_dir <- "figures/reproduction_outputs/simulation/gray_four_method_n1000_p5_rerun"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 write.csv(summary_df, file.path(out_dir, "gray_run_summary.csv"), row.names = FALSE)
 saveRDS(

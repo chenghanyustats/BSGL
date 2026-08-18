@@ -138,7 +138,7 @@ fit_bsgl <- function(y, X, coords, L = 36,
       Vj <- chol2inv(R)
       mj <- (1 / s2) * Vj %*% crossprod(XP[[j]], rj)
 
-      b_new <- as.numeric(rmvnorm(1, mj, Vj))
+      b_new <- as.numeric(mvtnorm::rmvnorm(1, mj, Vj))
       B[, j] <- b_new
 
       Xb_new <- XP[[j]] %*% b_new
