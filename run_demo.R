@@ -51,10 +51,10 @@ force_install <- tolower(
 
 if (force_install || !requireNamespace("BSGL", quietly = TRUE)) {
     cat("   Installing BSGL directly from GitHub...\n")
-    cat("   Repository: Qishi7/BSGL\n")
+    cat("   Repository: chenghanyustats/BSGL\n") # chenghanyustats to Qishi7
     
     remotes::install_github(
-        "Qishi7/BSGL",
+        "chenghanyustats/BSGL",
         dependencies = NA,      # Depends, Imports, and LinkingTo only
         upgrade = "never",
         build_vignettes = FALSE,
@@ -174,7 +174,7 @@ if (nzchar(pkg_demo_dir)) {
     test_file  <- file.path(demo_dir, "test_data.RData")
     
     base_url <- paste0(
-        "https://raw.githubusercontent.com/Qishi7/BSGL/",
+        "https://raw.githubusercontent.com/chenghanyustats/BSGL/",
         "main/inst/extdata/simulation_demo/n1000_p5/"
     )
     
